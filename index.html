@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IoT Dashboard</title>
+    <!-- link and script taken from pyscript website -->
+    <link rel="stylesheet" href="https://pyscript.net/releases/2024.1.1/core.css" />
+    <script type="module" src="https://pyscript.net/releases/2024.1.1/core.js"></script>
+</head>
+<style>
+    body {
+    background-color: darkgray;
+    color: white; 
+    
+}
+
+/* css for light bulbs */
+#lightOff{
+    width: 40px;
+    height: 40px;
+    padding-left: 4px;
+    padding-top: 5px;
+}
+
+#lightOn{
+    display: none;
+    width: 50px;
+    height: 50px;
+    
+}
+
+#lightOn:hover {
+    cursor: pointer;
+}
+
+#lightOff:hover {
+    cursor: pointer;
+}
+
+
+</style>
+
+<body>
+    <div class="lightbulb-container">
+    <img src="assets/lightbulbOff.png" alt="lightbulbOff" id = "lightOff" py-click="light_switch">
+    <img src="assets/lightbulbOn.png" alt="lightbulbOn" id = "lightOn" py-click="light_switch">
+   
+    </div>
+    
+    <!-- Have to run project off server (XAMPP) for this to work apparently -->
+    <!-- <script type="py" src="./main.py" config="./pyscript.json"></script> -->
+</body>
+
+<!-- JS to make the bulbs switch from on to off -->
+<script>
+document.getElementById("lightOff").addEventListener('click', function(){
+    var lightOff = document.getElementById("lightOff")
+    lightOff.style.display = 'none'
+    var  lightOn = document.getElementById("lightOn")
+    lightOn.style.display = 'block'
+})
+
+    document.getElementById("lightOn").addEventListener('click', function(){
+    var lightOn = document.getElementById("lightOn")
+    lightOn.style.display = 'none'
+    var  lightOff = document.getElementById("lightOff")
+    lightOff.style.display = 'block'
+})
+</script>
+
+</html>
