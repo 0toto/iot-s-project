@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IoT Dashboard</title>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+</head>
+<style>
+    body {
+    background-color: darkgray;
+    color: white; 
+    
+}
+
+/* css for light bulbs */
+#lightOff{
+    width: 40px;
+    height: 40px;
+    padding-left: 4px;
+    padding-top: 5px;
+}
+
+#lightOn{
+    display: none;
+    width: 50px;
+    height: 50px;
+    
+}
+
+#lightOn:hover {
+    cursor: pointer;
+}
+
+#lightOff:hover {
+    cursor: pointer;
+}
+
+
+</style>
+
+<body>
+    <div class="lightbulb-container">
+    <img src="static/lightbulbOff.png" alt="lightbulbOff" id = "lightOff">
+    <img src="static/lightbulbOn.png" alt="lightbulbOn" id = "lightOn">
+   
+    </div>
+    
+    <!-- Have to run project off server (XAMPP) for this to work apparently -->
+    <!-- <script type="py" src="./main.py" config="./pyscript.json"></script> -->
+</body>
+
+<!-- JS to make the bulbs switch from on to off -->
+<script>
+$(document).ready(function(){
+    sendClick(true);
+})
+
+$("#lightOff").click(function(){
+    var lightOff = document.getElementById("lightOff");
+    lightOff.style.display = 'none';
+    var  lightOn = document.getElementById("lightOn");
+    lightOn.style.display = 'block';
+    sendClick();
+});
+
+$("#lightOn").click(function(){
+    var lightOn = document.getElementById("lightOn");
+    lightOn.style.display = 'none';
+    var  lightOff = document.getElementById("lightOff");
+    lightOff.style.display = 'block';
+    sendClick();
+});
+
+// get message sent to the page itself, through ajax and called on click
+// to trigger python function without need for a proxy function
+function sendClick(off = false){
+    click = off ? 0 : 1;
+    $.ajax({
+        url: '',
+        type: 'get',
+        contentType: "application/json",
+        data: {"click": click}
+    })
+}
+</script>
+
+</html>
