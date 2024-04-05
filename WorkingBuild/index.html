@@ -1,0 +1,321 @@
+<!-- some code used from https://maker.pro/raspberry-pi/tutorial/how-to-control-a-raspberry-pi-gpio-pin-with-a-nodejs-web-server , more specifically for socket.io and buttons -->
+<!DOCTYPE html>
+<html>
+<title>Fan Dashboard</title>
+
+<head>
+    <meta charset="utf-8">
+    <!-- css in a node.js project required express, so we decided to nest it.-->
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+        }
+        
+        .container, .container2 {
+            display: flex;
+            flex-direction: column; /* Align children vertically */
+            align-items: center; /* Center children horizontally */
+            justify-content: center; /* Center children vertically */
+            height: 100vh; /* Set container height to full viewport height */
+        }
+        
+        /* Thermometer styles */
+        .thermometer-container, .thermometer-container2 {
+            margin-bottom: 20px; /* Add some space between thermometer and fan */
+            position: relative;
+            width: 400px;
+            height: 200px;
+            overflow: hidden;
+            text-align: center;
+        }
+        
+        .gauge-a, .gauge-a2 {
+            z-index: 1;
+            position: absolute;
+            background-color: rgba(255,255,255,.2);
+            width: 400px;
+            height: 200px;
+            top: 0%;
+            border-radius: 250px 250px 0px 0px;
+        }
+        
+        .gauge-b, .gauge-b2 {
+            z-index: 3;
+            position: absolute;
+            background-color: #222;
+            width: 250px;
+            height: 125px;
+            top: 75px;
+            margin-left: 75px;
+            margin-right: auto;
+            border-radius: 250px 250px 0px 0px;
+        }
+        
+        .gauge-c, .gauge-c2 {
+            z-index: 2;
+            position: absolute;
+            background-color: #5664F9;
+            width: 400px;
+            height: 200px;
+            top: 200px;
+            margin-left: auto;
+            margin-right: auto;
+            border-radius: 0px 0px 200px 200px;
+            transform-origin: center top;
+            transition: all 1.3s ease-in-out;
+        }
+        
+        .gauge-data, .gauge-data2 {
+            z-index: 4;
+            color: rgba(255,255,255,.2);
+            font-size: 1.5em;
+            line-height: 25px;
+            position: absolute;
+            width: 400px;
+            height: 200px;
+            top: 90px;
+            margin-left: auto;
+            margin-right: auto;
+            transition: all 1s ease-out;
+        }
+        
+        #percent, #percent2 {
+            margin: 0;
+        }
+        
+        /* Fan styles */
+        .fan-container {
+            position: relative;
+        }
+        
+        .ceiling-container {
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            position: relative;
+            display: inline-block;
+            animation: none;
+        }
+        
+        .ceiling-container:after {
+            content: "";
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            border-radius: 50%;
+            width: 70px;
+            height: 70px;
+            margin-left: -35px;
+            margin-top: -35px;
+            background: #444;
+            box-shadow: inset 0 0px 0px 8px #444444, inset 0 1px 5px 22px #383838;
+        }
+        
+        .ceiling-fan {
+            display: block;
+            background: #ccc;
+            border-radius: 5px;
+            position: absolute;
+            box-shadow: inset 1px 1px 40px #555;
+        }
+        
+        .ceiling-fan:after {
+            content: "";
+            position: absolute;
+            background: #666;
+            display: block;
+        }
+        
+        .ceiling-fan.horizontal {
+            width: auto;
+            height: 50px;
+            top: 50%;
+            margin-top: -25px;
+            transform: skewX(20deg);
+        }
+        
+        .ceiling-fan.horizontal:after {
+            top: 25%;
+            width: 15px;
+            height: 50%;
+        }
+        
+        .ceiling-fan.vertical {
+            width: 50px;
+            height: auto;
+            left: 50%;
+            margin-left: -25px;
+            transform: skewY(20deg);
+        }
+        
+        .ceiling-fan.vertical:after {
+            height: 15px;
+            width: 50%;
+            margin-left: 25%;
+        }
+        
+        .ceiling-fan.left {
+            left: 0;
+            right: 50%;
+            margin-right: 45px;
+            border-radius: 50% 15px 15px 50%;
+        }
+        
+        .ceiling-fan.left:after {
+            left: 100%;
+        }
+        
+        .ceiling-fan.right {
+            right: 0;
+            left: 50%;
+            margin-left: 45px;
+            border-radius: 15px 50% 50% 15px;
+        }
+        
+        .ceiling-fan.right:after {
+            right: 100%;
+        }
+        
+        .ceiling-fan.top {
+            top: 0;
+            bottom: 50%;
+            margin-bottom: 45px;
+            border-radius: 50% 50% 15px 15px;
+        }
+        
+        .ceiling-fan.top:after {
+            top: 100%;
+        }
+        
+        .ceiling-fan.bottom {
+            top: 50%;
+            bottom: 0;
+            margin-top: 45px;
+            border-radius: 15px 15px 50% 50%;
+        }
+        
+        .ceiling-fan.bottom:after {
+            bottom: 100%;
+        }
+
+        .fan-container {
+            position: relative;
+        }
+
+        h1#percent{
+            margin-top: 40px;
+        }
+
+        button#state{
+            font-size: 17px;
+            font-weight: bolder;
+            border-radius: 8px;
+            padding: 15px;
+        }
+        
+
+        
+        /* Fan rotation animation */
+        @keyframes spin {
+            0% {
+            transform: rotate(0deg);
+            }
+            100% {
+            transform: rotate(360deg);
+            }
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <div class="container">
+        <div class="thermometer-container">
+            <div class="gauge-a"></div>
+            <div class="gauge-b"></div>
+            <div class="gauge-c"></div>
+            <div class="gauge-data">
+            <h1 id="percent">...</h1>
+        </div>
+    </div>
+
+    <div class="container2">
+        <div class="thermometer-container2">
+            <div class="gauge-a2"></div>
+            <div class="gauge-b2"></div>
+            <div class="gauge-c2"></div>
+            <div class="gauge-data2">
+            <h1 id="percent2">...</h1>
+        </div>
+    </div>
+
+    <div class="fan-container">
+        <div class="ceiling-container">
+            <div class="ceiling-fan horizontal left"></div>
+            <div class="ceiling-fan horizontal right"></div>  
+            <div class="ceiling-fan vertical rotated top"></div>
+            <div class="ceiling-fan vertical rotated bottom"></div>
+        </div>
+    </div>
+
+    <br>
+    <button type="button" id="state" onclick="killFan()" style="background-color:red;">Turn Off Fan</button> <!-- Turn fan off using the onclick function -->
+
+    <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+
+    <!-- <script src="jquery.js"></script> -->
+    <script>
+        
+        var socket = io.connect(); //load socket.io-client and connect to the host
+        socket.emit("fanStatRequest", null, true);
+
+        socket.on("fanStatResponse", status => {
+            var element = document.querySelector(".ceiling-container");
+            console.log(status);
+            if(status==0){
+                element.style.animation = 'none';
+            }else{
+                element.style.animation = 'spin 6ms linear infinite';
+            }
+            //document.getElementById('fan_status').innerHTML = `${status}`;
+        });
+
+        socket.on("dhtStatResponse", (temp, humid) => {
+            updateGauge(temp);
+            updateGauge2(humid);
+        });
+
+        function killFan() {
+            socket.emit("fanStatRequest", 0); //send button state to server
+        }
+        
+        // Update the gauge according to the sent value from socket
+        function updateGauge(percentage) {
+            const gaugeC = document.querySelector('.gauge-c');
+            const percentDisplay = document.getElementById('percent');
+            console.log(percentage);
+            percentDisplay.innerHTML = percentage + "°C";
+
+            const rotationAngle = percentage / 100 * 180;
+
+            gaugeC.style.transform = `rotate(${rotationAngle}deg)`;
+        }
+
+        function updateGauge2(percentage) {
+            const gaugeC = document.querySelector('.gauge-c2');
+            const percentDisplay = document.getElementById('percent2');
+            console.log(percentage);
+            percentDisplay.innerHTML = percentage + "%";
+
+            const rotationAngle = percentage / 100 * 180;
+
+            gaugeC2.style.transform = `rotate(${rotationAngle}deg)`;
+        }
+
+    </script>
+
+</body>
+
+</html>
