@@ -1,0 +1,285 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+#square1, #square2, #square3, #square4 {
+  padding: 100px;
+  margin: 10px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: burlywood; 
+}
+
+
+#bulb {
+  width: 130px;
+  height: 130px;
+  border-radius: 50%;
+  background-color: grey;
+  border: 2px solid rgb(61, 61, 61);
+  position: absolute;
+}
+
+#bulbButton {
+  position: absolute;
+  padding: 20px 12px;
+  margin-top: 124px; 
+  background-color: silver;
+  font-size: large;
+  border: 2px solid gray;
+  cursor: pointer;
+  border-bottom-left-radius: 15px;
+  border-bottom-right-radius: 15px;
+}
+
+.btn-end {
+  margin-top: 189px;
+  height: 11px;
+  width: 18px;
+  border-bottom-left-radius: 8px;
+  border-bottom-right-radius: 8px;
+  background-color: rgb(63, 63, 61);
+}
+
+#sliderContainer {
+  width: 50%;
+  margin: 50px auto;
+  text-align: center;
+}
+#output {
+  margin-top: 20px;
+}
+
+#space{
+  height: 50px;
+}
+
+
+/* code of the previous phase */
+
+body {
+  margin: 0;
+  padding: 0;
+}
+
+.container {
+  display: flex;
+  flex-direction: column; /* Align children vertically */
+  align-items: center; /* Center children horizontally */
+  justify-content: center; /* Center children vertically */
+  height: 100vh; /* Set container height to full viewport height */
+}
+
+/* Thermometer styles */
+.thermometer-container {
+  margin-bottom: 20px; /* Add some space between thermometer and fan */
+  position: relative;
+  width: 400px;
+  height: 200px;
+  overflow: hidden;
+  text-align: center;
+}
+
+.gauge-a {
+  z-index: 1;
+  position: absolute;
+  background-color: rgba(255,255,255,.2);
+  width: 400px;
+  height: 200px;
+  top: 0%;
+  border-radius: 250px 250px 0px 0px;
+}
+
+.gauge-b {
+  z-index: 3;
+  position: absolute;
+  background-color: #222;
+  width: 250px;
+  height: 125px;
+  top: 75px;
+  margin-left: 75px;
+  margin-right: auto;
+  border-radius: 250px 250px 0px 0px;
+}
+
+.gauge-c {
+  z-index: 2;
+  position: absolute;
+  background-color: #5664F9;
+  width: 400px;
+  height: 200px;
+  top: 200px;
+  margin-left: auto;
+  margin-right: auto;
+  border-radius: 0px 0px 200px 200px;
+  transform-origin: center top;
+  transition: all 1.3s ease-in-out;
+}
+
+.gauge-data {
+  z-index: 4;
+  color: rgba(255,255,255,.2);
+  font-size: 1.5em;
+  line-height: 25px;
+  position: absolute;
+  width: 400px;
+  height: 200px;
+  top: 90px;
+  margin-left: auto;
+  margin-right: auto;
+  transition: all 1s ease-out;
+}
+
+#percent {
+  margin: 0;
+}
+
+/* Fan styles */
+.fan-container {
+  position: relative;
+}
+
+.ceiling-container {
+  width: 300px;
+  height: 300px;
+  border-radius: 50%;
+  position: relative;
+  display: inline-block;
+  animation: spin 6ms linear infinite;
+}
+
+.ceiling-container:after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  border-radius: 50%;
+  width: 70px;
+  height: 70px;
+  margin-left: -35px;
+  margin-top: -35px;
+  background: #444;
+  box-shadow: inset 0 0px 0px 8px #444444, inset 0 1px 5px 22px #383838;
+}
+
+.ceiling-fan {
+  display: block;
+  background: #ccc;
+  border-radius: 5px;
+  position: absolute;
+  box-shadow: inset 1px 1px 40px #555;
+}
+
+.ceiling-fan:after {
+  content: "";
+  position: absolute;
+  background: #666;
+  display: block;
+}
+
+.ceiling-fan.horizontal {
+  width: auto;
+  height: 50px;
+  top: 50%;
+  margin-top: -25px;
+  transform: skewX(20deg);
+}
+
+.ceiling-fan.horizontal:after {
+  top: 25%;
+  width: 15px;
+  height: 50%;
+}
+
+.ceiling-fan.vertical {
+  width: 50px;
+  height: auto;
+  left: 50%;
+  margin-left: -25px;
+  transform: skewY(20deg);
+}
+
+.ceiling-fan.vertical:after {
+  height: 15px;
+  width: 50%;
+  margin-left: 25%;
+}
+
+.ceiling-fan.left {
+  left: 0;
+  right: 50%;
+  margin-right: 45px;
+  border-radius: 50% 15px 15px 50%;
+}
+
+.ceiling-fan.left:after {
+  left: 100%;
+}
+
+.ceiling-fan.right {
+  right: 0;
+  left: 50%;
+  margin-left: 45px;
+  border-radius: 15px 50% 50% 15px;
+}
+
+.ceiling-fan.right:after {
+  right: 100%;
+}
+
+.ceiling-fan.top {
+  top: 0;
+  bottom: 50%;
+  margin-bottom: 45px;
+  border-radius: 50% 50% 15px 15px;
+}
+
+.ceiling-fan.top:after {
+  top: 100%;
+}
+
+.ceiling-fan.bottom {
+  top: 50%;
+  bottom: 0;
+  margin-top: 45px;
+  border-radius: 15px 15px 50% 50%;
+}
+
+.ceiling-fan.bottom:after {
+  bottom: 100%;
+}
+
+.fan-container {
+  position: relative;
+}
+
+
+
+/* Fan rotation animation */
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+
+
