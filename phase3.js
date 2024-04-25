@@ -51,8 +51,16 @@ const percentageValueFromNode = 50;
 updateGauge(percentageValueFromNode);
 
 function toggleAnimation() {
-  var element = document.querySelector(".ceiling-container");
-      element.style.animation = 'none'; // turning off the fan
+  var fan = document.querySelector(".ceiling-container");
+  // Code taken from https://stackoverflow.com/questions/20883404/javascript-returning-the-last-word-in-a-string
+  var n = String(fan.style.animation).split(" ");
+  var term = n[n.length - 1];
+  if(term.includes('none')){
+    fan.style.animation = 'spin 6ms linear infinite'; //turning on the fan
+  }else{
+    fan.style.animation = 'none'; // turning off the fan
+  }
+      
 }
 
 
