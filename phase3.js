@@ -1,5 +1,5 @@
 //import sqlite
-const sqlite3 = require('sqlite3').verbose();
+//const sqlite3 = require('sqlite3').verbose();
 
 
 var bulb  = document.querySelector("#bulb");
@@ -28,11 +28,11 @@ var output = document.getElementById("output");
   output.value = slider.value;
 
 //database code
-const db = new sqlite3.Database('dataBase.db');
+//const db = new sqlite3.Database('dataBase.db');
 
-db.serialize(() => {
-  db.run('CREATE TABLE IF NOT EXISTS data (user_id INTEGER, name TEXT, tempareture INTEGER, humidity INTEGER, light_int INTEGER)');
-});
+//db.serialize(() => {
+  //db.run('CREATE TABLE IF NOT EXISTS data (user_id INTEGER, name TEXT, tempareture INTEGER, humidity INTEGER, light_int INTEGER)');
+//});
 
 
 //code of the previous phase
@@ -56,4 +56,22 @@ function toggleAnimation() {
 }
 
 
+var socket = new WebSocket('ws://127.0.0.1:1880/ws/example');
 
+        socket.onmessage = function(event) {
+            // Parse the incoming data
+            var mqttData = JSON.parse(event.data);
+			console.log(mqttData);
+            // Update the frontend elements
+            document.getElementById('output').innerText = mqttData;
+            document.getElementById('mySlider').value = mqttData;
+        };
+
+        socket.onopen = function(event) {
+            console.log('WebSocket connection established');
+            
+        };
+
+        socket.onerror = function(error) {
+            console.error('WebSocket error:', error);
+        };
