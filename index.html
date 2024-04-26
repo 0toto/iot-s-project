@@ -1,72 +1,64 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IoT Dashboard</title>
-    <!-- link and script taken from pyscript website -->
-    <link rel="stylesheet" href="https://pyscript.net/releases/2024.1.1/core.css" />
-    <script type="module" src="https://pyscript.net/releases/2024.1.1/core.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Curved Top Rectangle</title>
+  <link rel="stylesheet" href="cssPhase3.css">
+  <style>
+    div#grid{
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      width: 100%;
+    }
+  </style>
 </head>
-<style>
-    body {
-    background-color: darkgray;
-    color: white; 
-    
-}
-
-/* css for light bulbs */
-#lightOff{
-    width: 40px;
-    height: 40px;
-    padding-left: 4px;
-    padding-top: 5px;
-}
-
-#lightOn{
-    display: none;
-    width: 50px;
-    height: 50px;
-    
-}
-
-#lightOn:hover {
-    cursor: pointer;
-}
-
-#lightOff:hover {
-    cursor: pointer;
-}
-
-
-</style>
-
 <body>
-    <div class="lightbulb-container">
-    <img src="assets/lightbulbOff.png" alt="lightbulbOff" id = "lightOff" py-click="light_switch">
-    <img src="assets/lightbulbOn.png" alt="lightbulbOn" id = "lightOn" py-click="light_switch">
-   
+  <div id="grid">
+    <div class="rows">
+    <div id="square1">
+        <div class="btn-end"></div>
+        <button id="bulbButton">ON</button>
+        <div id="bulb"></div>
+        <div id="range-container">
+            <!--<input id="mySlider" disabled type="range" min="0" max="400" value="200"> -->
+              <input class="range" id="mySlider" disabled type="range" min="0" max="400" value="200"></input>
+          </div>
+          <p><strong>Light intensity: </strong><span id="output">...</span></p>
+        </div>
+        
+        
+    <div id="square2">
+      <div class="thermometer-container">
+        <div class="gauge-a"></div>
+        <div class="gauge-b"></div>
+        <div class="gauge-c"></div>
+        <div class="gauge-data">
+          <br>
+          <h1 id="percent">0%</h1>
+          <p>humidity</p>
+        </div>
+      </div>
     </div>
-    
-    <!-- Have to run project off server (XAMPP) for this to work apparently -->
-    <!-- <script type="py" src="./main.py" config="./pyscript.json"></script> -->
+    </div>
+    <div id="square3">
+      <div class="fan-container">
+        <div class="ceiling-container">
+          <div class="ceiling-fan horizontal left"></div>
+          <div class="ceiling-fan horizontal right"></div>  
+          <div class="ceiling-fan vertical rotated top"></div>
+          <div class="ceiling-fan vertical rotated bottom"></div>
+        </div>
+        <div id="button_container">
+          <button class="button-6" role="button" id="toggleAnimationButton" onclick="toggleAnimation()">Toggle Fan</button>
+        </div>
+        
+      </div>
+    </div>
+
+    </div> 
+  </div>
+  <script src="phase3.js"></script>
+  
 </body>
-
-<!-- JS to make the bulbs switch from on to off -->
-<script>
-document.getElementById("lightOff").addEventListener('click', function(){
-    var lightOff = document.getElementById("lightOff")
-    lightOff.style.display = 'none'
-    var  lightOn = document.getElementById("lightOn")
-    lightOn.style.display = 'block'
-})
-
-    document.getElementById("lightOn").addEventListener('click', function(){
-    var lightOn = document.getElementById("lightOn")
-    lightOn.style.display = 'none'
-    var  lightOff = document.getElementById("lightOff")
-    lightOff.style.display = 'block'
-})
-</script>
-
 </html>
