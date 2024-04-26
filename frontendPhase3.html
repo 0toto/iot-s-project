@@ -15,12 +15,16 @@
 </head>
 <body>
   <div id="grid">
+    <div class="rows">
     <div id="square1">
         <div class="btn-end"></div>
         <button id="bulbButton">ON</button>
         <div id="bulb"></div>
-        <input type="range" min="0" max="400" value="50" class="slider" id="mySlider" disabled>
-        <p>light intensity: <span id="output">50</span></p>
+        <div id="range-container">
+          <input type="range" min="0" max="400" value="200" class="slider" id="mySlider" disabled>
+        </div>
+        
+        <p><strong>Light intensity: </strong><span id="output">...</span></p>
     </div>
     <div id="square2">
       <div class="thermometer-container">
@@ -28,9 +32,11 @@
         <div class="gauge-b"></div>
         <div class="gauge-c"></div>
         <div class="gauge-data">
+          <br><br>
           <h1 id="percent">0%</h1>
         </div>
       </div>
+    </div>
     </div>
     <div id="square3">
       <div class="fan-container">
@@ -40,10 +46,12 @@
           <div class="ceiling-fan vertical rotated top"></div>
           <div class="ceiling-fan vertical rotated bottom"></div>
         </div>
-        <button id="toggleAnimationButton" onclick="toggleAnimation()">Toggle Fan</button> <!-- Use onclick attribute to call the function -->
+        <div id="button_container">
+          <button class="button-6" role="button" id="toggleAnimationButton" onclick="toggleAnimation()">Toggle Fan</button>
+        </div>
+        
       </div>
     </div>
-    <div id="square4">
 
     </div> 
   </div>

@@ -7,6 +7,20 @@ var switchButton = document.querySelector("button")
 
 var current = 0;
 
+function setButton(on){
+  if(on){
+    switchButton.innerHTML = "ON",
+    switchButton.style.padding = "20px 12px"
+    bulb.style.backgroundColor = "yellow"
+    current = 0;
+  }else{
+    switchButton.innerHTML = "OFF",
+    switchButton.style.padding = "20px 7.5px"
+    bulb.style.backgroundColor = "grey"
+    current = 1;
+  }
+}
+/*
 switchButton.addEventListener("click", ()=>{
     if (current == 0){
         switchButton.innerHTML = "OFF",
@@ -20,6 +34,7 @@ switchButton.addEventListener("click", ()=>{
         current = 0;
     }
 })
+*/
 
 var slider = document.getElementById("mySlider");
   slider.value = 30;
@@ -69,10 +84,15 @@ var socket = new WebSocket('ws://127.0.0.1:1880/ws/example');
         socket.onmessage = function(event) {
             // Parse the incoming data
             var mqttData = JSON.parse(event.data);
-			console.log(mqttData);
+			      console.log(mqttData);
             // Update the frontend elements
             document.getElementById('output').innerText = mqttData;
             document.getElementById('mySlider').value = mqttData;
+            if(mqttData>400){
+              setButton(true);
+            }else{
+              setButton(false);
+            }
         };
 
         socket.onopen = function(event) {
