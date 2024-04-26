@@ -21,7 +21,11 @@
         <button id="bulbButton">ON</button>
         <div id="bulb"></div>
         <div id="range-container">
-          <input type="range" min="0" max="400" value="200" class="slider" id="mySlider" disabled>
+          <div class="range-slider" style='--min:0; --max:100; --step:5; --value:75; --text-value:"75";'>
+            <input id="mySlider" disabled type="range" min="0" max="400" value="200" oninput="this.parentNode.style.setProperty('--value',this.value); this.parentNode.style.setProperty('--text-value', JSON.stringify(this.value))">
+            <output></output>
+            <div class='range-slider__progress'></div>
+          </div>
         </div>
         
         <p><strong>Light intensity: </strong><span id="output">...</span></p>
